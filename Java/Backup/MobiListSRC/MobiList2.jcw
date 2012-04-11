@@ -1,0 +1,16 @@
+<?xml?>
+<workspace>
+	<settings>
+		<label>MobiList</label>
+	</settings>
+	<users>
+		<user>
+			<path>MobiList2.jcu</path>
+		</user>
+	</users>
+	<projects>
+		<project>
+			<path>MobiList.jcp</path>
+		</project>
+	</projects>
+</workspace>

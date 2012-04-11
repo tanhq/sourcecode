@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    This file is released under the GNU General Public License.
+    Refer to the COPYING file distributed with this package.
+
+    Copyright (c) 2008-2009 WURFL-Pro SRL
+
+-->
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+"http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+	<bean id="resourcesHolder"
+		class="net.sourceforge.wurfl.core.resource.CustomResourcesHolder">
+		<constructor-arg index="0">
+			<bean
+				class="net.sourceforge.wurfl.core.resource.SpringWURFLResource">
+				<constructor-arg index="0" value="/WEB-INF/wurfl.zip" />
+			</bean>
+		</constructor-arg>
+		<constructor-arg index="1">
+			<bean
+				class="net.sourceforge.wurfl.core.resource.WURFLResources">
+				<constructor-arg index="0">
+					<list />
+				</constructor-arg>
+			</bean>
+		</constructor-arg>
+	</bean>
+
+	<bean id="modelManager"
+		class="net.sourceforge.wurfl.core.resource.WURFLModelManager">
+		<constructor-arg index="0">
+			<bean
+				class="net.sourceforge.wurfl.core.resource.SAXModelDevicesProvider" />
+		</constructor-arg>
+		<constructor-arg index="1">
+			<bean
+				class="net.sourceforge.wurfl.core.resource.SAXModelDevicesProvider" />
+		</constructor-arg>
+		<constructor-arg index="2" ref="resourcesHolder" />
+	</bean>
+
+
+	<bean id="wurflModel" factory-bean="modelManager" factory-method="getModel" />
+
+
+	<!-- Handlers, Filters and Matchers -->
+
+
+	<bean id="handlersFactory" class="net.sourceforge.wurfl.core.handlers.HandlersFactory" />
+
+	<bean id="filterChainFactory"
+		class="net.sourceforge.wurfl.core.handlers.classifiers.FilterChainFactory">
+		<constructor-arg ref="handlersFactory" />
+	</bean>
+
+	<bean id="matcherChainFactory"
+		class="net.sourceforge.wurfl.core.handlers.matchers.MatcherChainFactory">
+		<constructor-arg ref="handlersFactory" />
+	</bean>
+
+
+	<bean id="matcherManager"
+		class="net.sourceforge.wurfl.core.handlers.matchers.MatcherManager">
+		<constructor-arg ref="wurflModel" />
+		<constructor-arg ref="matcherChainFactory" />
+		<constructor-arg ref="filterChainFactory" />
+	</bean>
+
+
+	<!-- Requests -->
+	<bean id="requestFactory" class="net.sourceforge.wurfl.core.request.DefaultWURFLRequestFactory" />
+
+
+	<!-- Caching -->
+
+	<!-- uncomment it to enable ehcache -->
+	<!-- 
+		<bean id="cacheManager"
+		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation">
+		<value>/WEB-INF/ehcache.xml</value>
+		</property>
+		</bean>
+	-->
+
+	<!-- uncomment it to use ehcache to cache devices -->
+	<!-- 
+		<bean id="deviceCacheProvider"
+		class="net.sourceforge.wurfl.core.cache.EhCacheProvider">
+		<property name="cache">
+		<bean
+		class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+		<property name="cacheManager" ref="cacheManager" />
+		<property name="cacheName"
+		value="net.sourceforge.wurfl.core.Device" />
+		</bean>
+		</property>
+		</bean>
+	-->
+
+	<!-- uncomment it to use LRUMap to cache devices; available values are:
+		net.sourceforge.wurfl.core.cache.LRUMapCacheProvider
+		net.sourceforge.wurfl.core.cache.HashMapCacheProvider
+		net.sourceforge.wurfl.core.cache.NullCacheProvider
+		net.sourceforge.wurfl.core.cache.EhCacheProvider 
+		For ehcache look above 
+	-->
+	<bean id="deviceCacheProvider"
+		class="net.sourceforge.wurfl.core.cache.LRUMapCacheProvider" />
+
+	<!-- Default DeviceProvider -->
+	<bean id="deviceProvider" class="net.sourceforge.wurfl.core.DefaultDeviceProvider">
+		<constructor-arg ref="wurflModel" />
+	</bean>
+
+	<!-- Uncomment it to use HierarchyCapabilityHolder: it is more efficent for one-capability request and it waste less memory. -->
+	<!--
+		<bean id="deviceProvider"
+		class="net.sourceforge.wurfl.core.HierarchyDeviceProvider">
+		<constructor-arg ref="wurflModel" />
+		</bean>
+	-->
+	
+	<!-- Services -->
+	<bean id="wurflService"
+		class="net.sourceforge.wurfl.core.DefaultWURFLService">
+		<constructor-arg ref="matcherManager" />
+		<constructor-arg ref="deviceProvider" />
+		<constructor-arg ref="deviceCacheProvider" />
+	</bean>
+
+	<!-- WURFL Manager -->
+	<bean id="wurflManager"
+		class="net.sourceforge.wurfl.core.DefaultWURFLManager">
+		<constructor-arg ref="wurflService" />
+		<constructor-arg ref="requestFactory" />
+	</bean>
+
+	<!-- WURFL Utils -->
+	<bean id="wurflUtils"
+		class="net.sourceforge.wurfl.core.WURFLUtils">
+		<constructor-arg ref="wurflModel" />
+	</bean>
+
+	<!-- WURFL Holder -->
+	<bean id="wurflHolder"
+		class="net.sourceforge.wurfl.core.DefaultWURFLHolder">
+		<constructor-arg ref="wurflManager" />
+		<constructor-arg ref="wurflUtils" />
+	</bean>
+
+	<!-- Put WURFL Holder in ServletContext -->
+	<bean
+		class="org.springframework.web.context.support.ServletContextAttributeExporter">
+		<property name="attributes">
+			<map>
+				<entry key="net.sourceforge.wurfl.core.WURFLHolder" value-ref="wurflHolder" />
+			</map>
+		</property>
+	</bean>
+
+</beans>

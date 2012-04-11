@@ -1,0 +1,79 @@
+
+An unexpected exception has been detected in native code outside the VM.
+Unexpected Signal : EXCEPTION_ACCESS_VIOLATION (0xc0000005) occurred at PC=0x2EB6037
+Function=GetLspGuid+0x2C27
+Library=C:\WINDOWS\system32\AVLibrary.dll
+
+Current Java thread:
+	at java.net.PlainSocketImpl.socketConnect(Native Method)
+	at java.net.PlainSocketImpl.doConnect(PlainSocketImpl.java:305)
+	- locked <0x1001c688> (a java.net.PlainSocketImpl)
+	at java.net.PlainSocketImpl.connectToAddress(PlainSocketImpl.java:171)
+	at java.net.PlainSocketImpl.connect(PlainSocketImpl.java:158)
+	at java.net.Socket.connect(Socket.java:452)
+	at java.net.Socket.connect(Socket.java:402)
+	at java.net.Socket.<init>(Socket.java:309)
+	at java.net.Socket.<init>(Socket.java:153)
+	at com.enterprisedt.net.ftp.FTPControlSocket.<init>(FTPControlSocket.java:210)
+	at com.enterprisedt.net.ftp.FTPClient.<init>(FTPClient.java:521)
+	at com.enterprisedt.net.ftp.FTPClient.<init>(FTPClient.java:454)
+	at com.enterprisedt.net.ftp.FTPClient.<init>(FTPClient.java:437)
+	at neo.score24.services.eventServices.main(eventServices.java:923)
+
+Dynamic libraries:
+0x00400000 - 0x0040B000 	C:\j2sdk1.4.2\bin\java.exe
+0x7C800000 - 0x7C8C0000 	C:\WINDOWS\system32\ntdll.dll
+0x77E40000 - 0x77F42000 	C:\WINDOWS\system32\kernel32.dll
+0x77F50000 - 0x77FEB000 	C:\WINDOWS\system32\ADVAPI32.dll
+0x77C50000 - 0x77CEF000 	C:\WINDOWS\system32\RPCRT4.dll
+0x76F50000 - 0x76F63000 	C:\WINDOWS\system32\Secur32.dll
+0x77BA0000 - 0x77BFA000 	C:\WINDOWS\system32\MSVCRT.dll
+0x08000000 - 0x08138000 	C:\j2sdk1.4.2\jre\bin\client\jvm.dll
+0x77380000 - 0x77411000 	C:\WINDOWS\system32\USER32.dll
+0x77C00000 - 0x77C48000 	C:\WINDOWS\system32\GDI32.dll
+0x76AA0000 - 0x76ACD000 	C:\WINDOWS\system32\WINMM.dll
+0x71BC0000 - 0x71BC8000 	C:\WINDOWS\system32\rdpsnd.dll
+0x771F0000 - 0x77201000 	C:\WINDOWS\system32\WINSTA.dll
+0x71C40000 - 0x71C97000 	C:\WINDOWS\system32\NETAPI32.dll
+0x76B70000 - 0x76B7B000 	C:\WINDOWS\system32\PSAPI.DLL
+0x10000000 - 0x10007000 	C:\j2sdk1.4.2\jre\bin\hpi.dll
+0x00390000 - 0x0039E000 	C:\j2sdk1.4.2\jre\bin\verify.dll
+0x003A0000 - 0x003B9000 	C:\j2sdk1.4.2\jre\bin\java.dll
+0x003D0000 - 0x003DD000 	C:\j2sdk1.4.2\jre\bin\zip.dll
+0x00970000 - 0x0097F000 	C:\j2sdk1.4.2\jre\bin\net.dll
+0x71C00000 - 0x71C17000 	C:\WINDOWS\system32\WS2_32.dll
+0x71BF0000 - 0x71BF8000 	C:\WINDOWS\system32\WS2HELP.dll
+0x02EB0000 - 0x02EDA000 	C:\WINDOWS\system32\AVLibrary.dll
+0x71B20000 - 0x71B61000 	C:\WINDOWS\system32\MSWSOCK.dll
+0x76CF0000 - 0x76D0A000 	C:\WINDOWS\system32\iphlpapi.dll
+0x77670000 - 0x777A9000 	C:\WINDOWS\system32\ole32.dll
+0x77D00000 - 0x77D8B000 	C:\WINDOWS\system32\OLEAUT32.dll
+0x5F270000 - 0x5F2CA000 	C:\WINDOWS\system32\hnetcfg.dll
+0x71AE0000 - 0x71AE8000 	C:\WINDOWS\System32\wshtcpip.dll
+0x777B0000 - 0x77833000 	C:\WINDOWS\system32\CLBCatQ.DLL
+0x77010000 - 0x770D6000 	C:\WINDOWS\system32\COMRes.dll
+0x77B90000 - 0x77B98000 	C:\WINDOWS\system32\VERSION.dll
+0x03280000 - 0x03545000 	C:\WINDOWS\system32\xpsp2res.dll
+0x745E0000 - 0x7489E000 	C:\WINDOWS\system32\msi.dll
+0x75DA0000 - 0x75E5D000 	C:\WINDOWS\system32\SXS.DLL
+0x76C10000 - 0x76C38000 	C:\WINDOWS\system32\imagehlp.dll
+0x6D580000 - 0x6D628000 	C:\WINDOWS\system32\dbghelp.dll
+
+Heap at VM Abort:
+Heap
+ def new generation   total 576K, used 114K [0x10010000, 0x100b0000, 0x104f0000)
+  eden space 512K,   9% used [0x10010000, 0x1001c8a0, 0x10090000)
+  from space 64K, 100% used [0x100a0000, 0x100b0000, 0x100b0000)
+  to   space 64K,   0% used [0x10090000, 0x10090000, 0x100a0000)
+ tenured generation   total 1408K, used 114K [0x104f0000, 0x10650000, 0x14010000)
+   the space 1408K,   8% used [0x104f0000, 0x1050cb48, 0x1050cc00, 0x10650000)
+ compacting perm gen  total 4096K, used 1792K [0x14010000, 0x14410000, 0x18010000)
+   the space 4096K,  43% used [0x14010000, 0x141d0198, 0x141d0200, 0x14410000)
+
+Local Time = Mon Sep 14 07:32:27 2009
+Elapsed Time = 10
+#
+# The exception above was detected in native code outside the VM
+#
+# Java VM: Java HotSpot(TM) Client VM (1.4.2_07-b05 mixed mode)
+#

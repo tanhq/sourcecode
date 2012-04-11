@@ -1,0 +1,28 @@
+// Decompiled by DJ v3.5.5.77 Copyright 2003 Atanas Neshkov  Date: 2/10/2004 11:40:08 AM
+// Home Page : http://members.fortunecity.com/neshkov/dj.html  - Check often for new version!
+// Decompiler options: packimports(3) 
+// Source File Name:   MMS_Config.java
+
+package com.cdit.portal;
+
+
+public class MMS_Config
+{
+
+    public MMS_Config()
+    {
+        Path_wallpaper = "";
+        Path_screensaver = "";
+        Path_polyphonic = "";
+        Path_gameimage = "";
+        Path_wallpaper = "vietnamese/mms/mobiFunlive/wallpaper";
+        Path_screensaver = "/vietnamese/mms/mobiFunlive/screensaver";
+        Path_polyphonic = "/vietnamese/mms/mobiFunlive/polyphonic";
+        Path_gameimage = "/vietnamese/mms/mobiFunlive/gameimage";
+    }
+
+    public String Path_wallpaper;
+    public String Path_screensaver;
+    public String Path_polyphonic;
+    public String Path_gameimage;
+}

@@ -1,0 +1,187 @@
+<?xml version="1.0"?>
+<!--
+
+    This file is released under the GNU General Public License.
+    Refer to the COPYING file distributed with this package.
+
+    Copyright (c) 2008-2009 WURFL-Pro SRL
+
+-->
+<!-- $Id: build.xml 1044 2009-03-09 15:48:58Z filippo.deluca $ -->
+<project name="${project.name}" default="package" basedir=".">
+	<description>
+       ${project.description}
+    </description>
+
+	<!-- ================== Property Definitions ===================== -->
+
+	<property file="build.properties" />
+	<property file="${user.home}/build.properties" />
+
+	<!-- ================= File and Directory Names ==================== -->
+
+	<property name="app.name" value="${project.name}" />
+	<property name="app.version" value="${project.version}" />
+	
+	<property name="lib.home" value="${basedir}/lib" />
+
+	<property name="src.home" value="${basedir}/src" />
+	<property name="src.main.home" value="${src.home}/main" />
+	<property name="src.test.home" value="${src.home}/test" />
+	
+	<property name="src.main.java.home" value="${src.main.home}/java" />
+	<property name="src.main.resources.home" value="${src.main.home}/resources" />
+	<property name="src.main.webapp.home" value="${src.main.home}/webapp" />
+	
+	<property name="src.test.java.home" value="${src.test.home}/java" />
+	<property name="src.test.resources.home" value="${src.test.home}/resources" />
+	
+	<property name="target.home" value="${basedir}/target" />
+	<property name="target.classes.home" value="${target.home}/classes" />
+	<property name="target.test-classes.home" value="${target.home}/test-classes" />
+
+	<property name="test-output.home" value="test-output" />
+
+	<!-- =============== Custom Ant Task Definitions =================== -->
+
+	<property name="compile.debug" value="true" />
+	<property name="compile.deprecation" value="false" />
+	<property name="compile.optimize" value="true" />
+	
+	<!-- ================== Compilation Classpath ======================= -->
+
+	<path id="compile.classpath">
+		<pathelement location="${src.main.java.home}" />
+		<pathelement location="${src.main.resources.home}" />
+		
+		<fileset dir="${lib.home}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+	
+	<path id="test.classpath">
+	
+		<pathelement location="${target.classes.home}" />
+		<pathelement location="${target.test-classes.home}" />
+		<pathelement location="${src.test.java.home}" />
+		<pathelement location="${src.test.resources.home}" />
+
+		<fileset dir="${lib.home}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+	
+	
+	<!-- =============== Custom Ant Task Definitions =================== -->
+
+	<!-- =================== All Target ================================ -->
+	<!--
+    The "all" target is a shortcut for running the "clean" target
+    followed by the "compile" target, to force a complete recompile.
+    -->
+
+	<target name="all" depends="clean, compile, package" description="Clean build and dist directories, then compile" />
+
+	<!-- ================== Clean Target ============================== -->
+
+	<target name="clean" description="Delete old build and dist directories">
+		<delete dir="${target.home}" />
+	</target>
+
+	<!-- ================== Compile Target =========================== -->
+
+	<target name="compile" depends="prepare" description="Compile Java sources">
+		<mkdir dir="${target.classes.home}" />
+		<javac srcdir="${src.main.java.home}" destdir="${target.classes.home}" debug="${compile.debug}" deprecation="${compile.deprecation}" optimize="${compile.optimize}">
+			<classpath refid="compile.classpath" />
+		</javac>
+		<copy todir="${target.classes.home}">
+			<fileset dir="${src.main.java.home}" excludes="**/*.java" />
+		</copy>
+		<copy todir="${target.classes.home}">
+			<fileset dir="${src.main.resources.home}" excludes="**/*.java" />
+		</copy>
+	</target>
+	
+	<target name="compile-test" depends="prepare, compile" description="Compile Java test">
+		<mkdir dir="${target.test-classes.home}" />
+		<javac srcdir="${src.test.java.home}" destdir="${target.test-classes.home}" debug="${compile.debug}" deprecation="${compile.deprecation}" optimize="${compile.optimize}">
+			<classpath refid="test.classpath" />
+		</javac>
+		<copy todir="${target.test-classes.home}">
+			<fileset dir="${src.test.java.home}" excludes="**/*.java" />
+		</copy>
+		<copy todir="${target.test-classes.home}">
+			<fileset dir="${src.test.resources.home}" excludes="**/*.java" />
+		</copy>
+	</target>
+
+	<target name="exploded-package" depends="compile">
+		<property name="target.exploded-package.home" value="${target.home}/${project.build.finalname}.${project.packaging}.exploded" />
+		
+		<copy todir="${target.exploded-package.home}" >
+			<fileset dir="${src.main.webapp.home}" />
+		</copy>
+		
+		<mkdir dir="${target.exploded-package.home}/WEB-INF/lib"/>
+		<mkdir dir="${target.exploded-package.home}/WEB-INF/classes"/>
+		
+		<copy todir="${target.exploded-package.home}/WEB-INF/lib" >
+			<fileset dir="${lib.home}" >
+				<exclude name="servlet-api*"/>
+				<exclude name="jsp-api*"/>
+				<!--
+				<exclude name="jstl*"/>
+				<exclude name="standard*"/>
+				-->
+			</fileset>
+		</copy>
+
+		<copy todir="${target.exploded-package.home}/WEB-INF/classes" >
+			<fileset dir="${target.classes.home}" />
+		</copy>
+
+	</target>
+	
+	<target name="package" depends="exploded-package">
+		
+		<war destfile="${target.home}/${project.build.finalname}.${project.packaging}" needxmlfile="false" >
+			<fileset dir="${target.home}/${project.build.finalname}.${project.packaging}.exploded" />
+			
+			<manifest>
+				<attribute name="Built-By" value="${user.name}" />
+			</manifest>
+		</war>
+		
+	</target>
+	
+	<!-- ================== Prepare Target ============================= -->
+
+	<target name="prepare">
+		<tstamp />
+		<mkdir dir="${target.home}" />
+		<mkdir dir="${target.classes.home}" />
+		<mkdir dir="${target.test-classes.home}" />
+	</target>
+
+	<!-- ================== RmBak Target ============================= -->
+
+	<target name="rmbak" description="Delete *.bak files everywhere">
+
+		<delete>
+			<fileset dir="${src.home}" includes="**/*.bak" />
+		</delete>
+
+	</target>
+
+	<!-- ================== RmLog Target ============================= -->
+
+	<target name="rmlog" description="Delete *.log files from build directory">
+
+		<delete>
+			<fileset dir="${build.home}" includes="**/*.log*" />
+		</delete>
+
+	</target>
+	
+</project>

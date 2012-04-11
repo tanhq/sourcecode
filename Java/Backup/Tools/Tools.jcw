@@ -1,0 +1,16 @@
+<?xml?>
+<workspace>
+	<settings>
+		<label>Tools</label>
+	</settings>
+	<users>
+		<user>
+			<path>Tools.jcu</path>
+		</user>
+	</users>
+	<projects>
+		<project>
+			<path>Tools.jcp</path>
+		</project>
+	</projects>
+</workspace>

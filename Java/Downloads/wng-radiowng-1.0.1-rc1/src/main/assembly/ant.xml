@@ -1,0 +1,58 @@
+<!--
+
+    This file is released under the GNU General Public License.
+    Refer to the COPYING file distributed with this package.
+
+    Copyright (c) 2008-2009 WURFL-Pro SRL
+
+-->
+<!-- $Id: ant.xml 1044 2009-03-09 15:48:58Z filippo.deluca $ -->
+<assembly>
+	<id>ant</id>
+	<formats> 
+		<format>tar.bz2</format>
+		<format>zip</format>
+	</formats>
+	<dependencySets>
+		<dependencySet>
+			<outputDirectory>/lib</outputDirectory>
+			<scope>compile</scope>
+			<includes></includes>
+            <excludes>
+              <exclude>${project.groupId}:${project.artifactId}:${project.packaging}:${project.version}</exclude>
+            </excludes>
+		</dependencySet>
+	</dependencySets>
+	<fileSets>
+		<fileSet>
+			<includes>
+				<include>LICENSE*</include>
+				<include>COPYING*</include>
+			</includes>
+			<useDefaultExcludes>true</useDefaultExcludes>
+		</fileSet>
+		<fileSet>
+			<outputDirectory>src/main</outputDirectory>
+			<directory>src/main</directory>
+			<useDefaultExcludes>true</useDefaultExcludes>
+		</fileSet>
+		<fileSet>
+			<outputDirectory>src/test</outputDirectory>
+			<directory>src/test</directory>
+			<useDefaultExcludes>true</useDefaultExcludes>
+		</fileSet>
+	</fileSets>
+	<files>
+		<file>
+			<source>src/main/assembly/ant/build.xml</source>
+			<destName>build.xml</destName>
+			<outputDirectory>/</outputDirectory>
+		</file>
+		<file>
+			<source>src/main/assembly/ant/build.properties</source>
+			<destName>build.properties</destName>
+			<outputDirectory>/</outputDirectory>
+			<filtered>true</filtered>
+		</file>
+	</files>
+</assembly>

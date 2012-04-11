@@ -1,0 +1,151 @@
+// Decompiled by DJ v3.5.5.77 Copyright 2003 Atanas Neshkov  Date: 2/10/2004 11:59:07 AM
+// Home Page : http://members.fortunecity.com/neshkov/dj.html  - Check often for new version!
+// Decompiler options: packimports(3) 
+// Source File Name:   DBConnection.java
+
+package com.cdit.portal;
+
+import com.cdit.portal.object.QueryInfo;
+import java.io.PrintStream;
+import java.sql.*;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+
+public class DBConnection
+{
+
+    public DBConnection()
+    {
+        initContext = null;
+        ds = null;
+        conn = null;
+        pstmt = null;
+        rs = null;
+    }
+
+    public static void main(String args[])
+    {
+    }
+
+    public void DBConnection()
+    {
+    }
+
+    public Connection getConnection()
+    {
+        String s = "jdbc/VmsDS";
+        InitialContext initialcontext = new InitialContext();
+        DataSource datasource = (DataSource)initialcontext.lookup(s);
+        conn = datasource.getConnection();
+        return conn;
+        Exception exception;
+        exception;
+        System.out.println("Error [DBConnection]: " + exception.toString());
+        Connection connection = null;
+        return connection;
+    }
+
+    public boolean setConnection()
+    {
+        return createConnection();
+    }
+
+    public boolean createConnection()
+    {
+        String s = "jdbc/VmsDS";
+        InitialContext initialcontext = new InitialContext();
+        DataSource datasource = (DataSource)initialcontext.lookup(s);
+        conn = datasource.getConnection();
+        return true;
+        Exception exception;
+        exception;
+        System.out.println("Error [DBConnection-createConnection]: " + exception.toString());
+        return false;
+    }
+
+    public boolean setPrepareStatement(String s)
+    {
+        pstmt = conn.prepareStatement(s);
+        return true;
+        SQLException sqlexception;
+        sqlexception;
+        return false;
+    }
+
+    public QueryInfo executeUpdate(String s)
+    {
+        QueryInfo queryinfo;
+        queryinfo = new QueryInfo();
+        if(conn == null)
+        {
+            System.out.println("Error [DBConnection]: connection is null");
+            queryinfo.setError(-28);
+            return queryinfo;
+        }
+        pstmt = conn.prepareStatement(s);
+        pstmt.executeUpdate();
+        return queryinfo;
+        SQLException sqlexception;
+        sqlexception;
+        System.out.println("Error [DBConnection]: " + sqlexception.toString());
+        queryinfo.setError(-30);
+        queryinfo.setErrorMessage(sqlexception.toString());
+        return queryinfo;
+    }
+
+    public QueryInfo executeQuery(String s)
+    {
+        QueryInfo queryinfo;
+        queryinfo = new QueryInfo();
+        if(conn == null)
+        {
+            System.out.println("Error [DBConnection]: connection is null");
+            queryinfo.setError(-28);
+            return queryinfo;
+        }
+        pstmt = conn.prepareStatement(s);
+        rs = pstmt.executeQuery();
+        queryinfo.setResult(rs);
+        return queryinfo;
+        SQLException sqlexception;
+        sqlexception;
+        System.out.println("Error [DBConnection]: " + sqlexception.toString());
+        queryinfo.setError(-30);
+        queryinfo.setErrorMessage(sqlexception.toString());
+        return queryinfo;
+    }
+
+    public void removeConnection()
+    {
+        try
+        {
+            if(pstmt != null)
+                pstmt.close();
+            if(conn != null)
+                conn.close();
+        }
+        catch(SQLException sqlexception)
+        {
+            System.out.println("Error [DBConnection]: " + sqlexception.toString());
+        }
+    }
+
+    public void closeConnection(Connection connection)
+    {
+        try
+        {
+            if(connection != null)
+                connection.close();
+        }
+        catch(SQLException sqlexception)
+        {
+            System.out.println("Error [DBConnection]: ".concat(String.valueOf(String.valueOf(sqlexception.toString()))));
+        }
+    }
+
+    private InitialContext initContext;
+    private DataSource ds;
+    private Connection conn;
+    public PreparedStatement pstmt;
+    private ResultSet rs;
+}
